@@ -1,0 +1,30 @@
+name: Docker Image CI
+
+on:
+  workflow_dispatch
+
+jobs:
+  Build:
+    runs-on: ubuntu22.04
+    name: Build on ubuntu 22.04 ARM64
+    steps:
+      - uses: actions/checkout@v2.1.0
+      - uses: uraimo/run-on-arch-action@v2
+      - name: Run commands
+        id: runcmd
+        with:
+          arch: arm64
+          distro: ubuntu22.04
+          run: |
+            cd
+            curl -fsL https://raw.githubusercontent.com/jetsung/golang-install/main/install.sh | bash
+            source /root/.bashrc
+            go install -v -tags "with_acme with_clash_api with_quic with_grpc with_wireguard with_ech with_utls with_gvisor with_shadowsocksr" github.com/sagernet/sing-box/cmd/sing-box@dev-next
+      
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v3.1.1
+        with:
+          name: sing-box
+          path: ./sing-box
+          
+    
