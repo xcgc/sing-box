@@ -1,7 +1,7 @@
-name: Docker Image CI
+name: "Build sing-box"
 
 on:
-  workflow_dispatch
+  workflow_dispatch:
 
 jobs:
   Build:
